@@ -42,6 +42,10 @@ h1, h2, h3, h4, h5, h6, p, label, .stMarkdown p {
     font-size: 15px;
     margin: 5px 0 0 0;
 }
+div[data-testid="stImage"] img {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -53,16 +57,28 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# แสดงรูปภาพจำแนก 2 สถานะ (ไม่เป็นโรคหัวใจ vs เป็นโรคหัวใจ)
-col1, col2 = st.columns(2)
+# แสดงรูปภาพหัวใจ 3 รูป พร้อมรูปเปรียบเทียบขนาดกะทัดรัด สวยงาม
+col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.header("ไม่เป็นโรคหัวใจ (ปกติ) 😎")
-    st.image("./img/user_normal.jpg", use_container_width=True)
+    st.header("หัวใจปกติ")
+    sub1, sub2 = st.columns(2)
+    with sub1:
+        st.image("./img/heart1.jpg", caption="ภาพหัวใจ", use_container_width=True)
+    with sub2:
+        st.image("./img/user_normal.jpg", caption="ปกติ เฟี้ยวๆ 😎", use_container_width=True)
 
 with col2:
-    st.header("เป็นโรคหัวใจ (มีความเสี่ยง) 🤒")
-    st.image("./img/user_disease.jpg", use_container_width=True)
+    st.header("หัวใจผิดปกติ")
+    sub3, sub4 = st.columns(2)
+    with sub3:
+        st.image("./img/heart2.jpg", caption="ภาพหัวใจ", use_container_width=True)
+    with sub4:
+        st.image("./img/user_disease.jpg", caption="มีความเสี่ยง 🤒", use_container_width=True)
+
+with col3:
+    st.header("หัวใจดีจริง")
+    st.image("./img/heart3.jpg", caption="หัวใจแข็งแรงสมบูรณ์ 💖", use_container_width=True)
 
 # แถบหัวข้อสถิติข้อมูล
 html_7 = """
@@ -137,10 +153,17 @@ if st.button("ทำนายผล", type="primary", use_container_width=True):
     res_c1, res_c2 = st.columns([1, 1.2])
 
     with res_c1:
+        img_u, img_h = st.columns(2)
         if out[0] == 0:
-            st.image("./img/user_normal.jpg", caption="ผลลัพธ์: ไม่เป็นโรคหัวใจ (เฟี้ยวๆ แข็งแรง 😎)", use_container_width=True)
+            with img_u:
+                st.image("./img/user_normal.jpg", caption="เฟี้ยวๆ ปกติ 😎", use_container_width=True)
+            with img_h:
+                st.image("./img/heart1.jpg", caption="หัวใจปกติ 💚", use_container_width=True)
         else:
-            st.image("./img/user_disease.jpg", caption="ผลลัพธ์: เป็นโรคหัวใจ (ตรวจพบความเสี่ยง 🤒)", use_container_width=True)
+            with img_u:
+                st.image("./img/user_disease.jpg", caption="มีความเสี่ยง 🤒", use_container_width=True)
+            with img_h:
+                st.image("./img/heart2.jpg", caption="หัวใจผิดปกติ ⚠️", use_container_width=True)
 
     with res_c2:
         if out[0] == 0:
