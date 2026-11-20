@@ -10,7 +10,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS เพื่อความสวยงาม โดยไม่กระทบ Icon และองค์ประกอบของ Streamlit
+# Custom CSS เพื่อความสวยงาม จัดกึ่งกลางภาพ และไม่กระทบ Icon ของ Streamlit
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
@@ -42,9 +42,28 @@ h1, h2, h3, h4, h5, h6, p, label, .stMarkdown p {
     font-size: 15px;
     margin: 5px 0 0 0;
 }
+
+/* จัดกึ่งกลางรูปภาพและการ์ดให้เท่ากันทุกรูป */
+div[data-testid="stImage"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    text-align: center;
+}
+
 div[data-testid="stImage"] img {
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    object-fit: cover;
+}
+
+.section-label {
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -57,28 +76,39 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# แสดงรูปภาพหัวใจ 3 รูป พร้อมรูปเปรียบเทียบขนาดกะทัดรัด สวยงาม
+# 1. แถวรูปภาพหัวใจ 3 รูปแบบ (ขนาด 220px กะทัดรัด สัดส่วน 1:1 เท่ากันทุกรูป ไม่ใหญ่เกินไป)
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.header("หัวใจปกติ")
-    sub1, sub2 = st.columns(2)
-    with sub1:
-        st.image("./img/heart1.jpg", caption="ภาพหัวใจ", use_container_width=True)
-    with sub2:
-        st.image("./img/user_normal.jpg", caption="ปกติ เฟี้ยวๆ 😎", use_container_width=True)
+    st.image("./img/heart1.jpg", caption="โครงสร้างหัวใจปกติ", width=220)
 
 with col2:
     st.header("หัวใจผิดปกติ")
-    sub3, sub4 = st.columns(2)
-    with sub3:
-        st.image("./img/heart2.jpg", caption="ภาพหัวใจ", use_container_width=True)
-    with sub4:
-        st.image("./img/user_disease.jpg", caption="มีความเสี่ยง 🤒", use_container_width=True)
+    st.image("./img/heart2.jpg", caption="ภาวะหัวใจผิดปกติ", width=220)
 
 with col3:
     st.header("หัวใจดีจริง")
-    st.image("./img/heart3.jpg", caption="หัวใจแข็งแรงสมบูรณ์ 💖", use_container_width=True)
+    st.image("./img/heart3.jpg", caption="หัวใจแข็งแรงสมบูรณ์", width=220)
+
+st.write("")
+
+# 2. แถวรูปภาพเปรียบเทียบผลการวินิจฉัย (2 คอลัมน์ สมมาตร สวยงาม)
+st.markdown("""
+<div style="background:#f8f9fa;padding:8px 15px;border-radius:10px;border:1px solid #e9ecef;text-align:center;margin-top:10px;margin-bottom:15px;">
+    <span style="font-weight:600;font-size:15px;color:#333;">🧑‍⚕️ ตัวอย่างผลการจำแนกสถานะสุขภาพบุคคล</span>
+</div>
+""", unsafe_allow_html=True)
+
+u_col1, u_col2 = st.columns(2)
+
+with u_col1:
+    st.markdown('<div class="section-label" style="color:#2e7d32;">💚 ไม่เป็นโรคหัวใจ (ปกติ) เฟี้ยวๆ 😎</div>', unsafe_allow_html=True)
+    st.image("./img/user_normal.jpg", width=230)
+
+with u_col2:
+    st.markdown('<div class="section-label" style="color:#c62828;">⚠️ เป็นโรคหัวใจ (มีความเสี่ยง) 🤒</div>', unsafe_allow_html=True)
+    st.image("./img/user_disease.jpg", width=230)
 
 # แถบหัวข้อสถิติข้อมูล
 html_7 = """
@@ -106,7 +136,7 @@ dt4 = dt['RestingBP'].mean()
 dx = [dt1, dt2, dt3, dt4]
 dx2 = pd.DataFrame(dx, index=["Age (อายุ)", "Cholesterol (คอเลสเตอรอล)", "MaxHR (ชีพจรสูงสุด)", "RestingBP (ความดันโลหิต)"], columns=["ค่าเฉลี่ย"])
 
-# การจินตทัศน์ข้อมูล (ทำงานได้จริง ไม่กระตุกหรือบัค)
+# การจินตทัศน์ข้อมูล
 if st.checkbox("แสดงการจินตทัศน์ข้อมูล (Bar Chart)"):
     st.bar_chart(dx2)
 
@@ -156,14 +186,14 @@ if st.button("ทำนายผล", type="primary", use_container_width=True):
         img_u, img_h = st.columns(2)
         if out[0] == 0:
             with img_u:
-                st.image("./img/user_normal.jpg", caption="เฟี้ยวๆ ปกติ 😎", use_container_width=True)
+                st.image("./img/user_normal.jpg", caption="เฟี้ยวๆ ปกติ 😎", width=160)
             with img_h:
-                st.image("./img/heart1.jpg", caption="หัวใจปกติ 💚", use_container_width=True)
+                st.image("./img/heart1.jpg", caption="หัวใจปกติ 💚", width=160)
         else:
             with img_u:
-                st.image("./img/user_disease.jpg", caption="มีความเสี่ยง 🤒", use_container_width=True)
+                st.image("./img/user_disease.jpg", caption="มีความเสี่ยง 🤒", width=160)
             with img_h:
-                st.image("./img/heart2.jpg", caption="หัวใจผิดปกติ ⚠️", use_container_width=True)
+                st.image("./img/heart2.jpg", caption="หัวใจผิดปกติ ⚠️", width=160)
 
     with res_c2:
         if out[0] == 0:
