@@ -53,20 +53,16 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# แสดงรูปภาพหัวใจ 3 รูป
-col1, col2, col3 = st.columns(3)
+# แสดงรูปภาพจำแนก 2 สถานะ (ไม่เป็นโรคหัวใจ vs เป็นโรคหัวใจ)
+col1, col2 = st.columns(2)
 
 with col1:
-    st.header("หัวใจปกติ")
-    st.image("./img/heart1.jpg", use_container_width=True)
+    st.header("ไม่เป็นโรคหัวใจ (ปกติ) 😎")
+    st.image("./img/user_normal.jpg", use_container_width=True)
 
 with col2:
-    st.header("หัวใจผิดปกติ")
-    st.image("./img/heart2.jpg", use_container_width=True)
-
-with col3:
-    st.header("หัวใจดีจริง")
-    st.image("./img/heart3.jpg", use_container_width=True)
+    st.header("เป็นโรคหัวใจ (มีความเสี่ยง) 🤒")
+    st.image("./img/user_disease.jpg", use_container_width=True)
 
 # แถบหัวข้อสถิติข้อมูล
 html_7 = """
@@ -142,20 +138,20 @@ if st.button("ทำนายผล", type="primary", use_container_width=True):
 
     with res_c1:
         if out[0] == 0:
-            st.image("./img/heart1.jpg", caption="ผลลัพธ์: หัวใจปกติ", use_container_width=True)
+            st.image("./img/user_normal.jpg", caption="ผลลัพธ์: ไม่เป็นโรคหัวใจ (เฟี้ยวๆ แข็งแรง 😎)", use_container_width=True)
         else:
-            st.image("./img/heart2.jpg", caption="ผลลัพธ์: มีความเสี่ยงต่อโรคหัวใจ", use_container_width=True)
+            st.image("./img/user_disease.jpg", caption="ผลลัพธ์: เป็นโรคหัวใจ (ตรวจพบความเสี่ยง 🤒)", use_container_width=True)
 
     with res_c2:
         if out[0] == 0:
-            st.success(f"### ✅ ผลการทำนาย: หัวใจปกติ (Normal)")
-            st.write(f"**ความน่าจะเป็นปกติ:** {normal_pct:.1f}% (ความเสี่ยงโรคหัวใจ: {risk_pct:.1f}%)")
+            st.success("### ✅ ผลการทำนาย: ไม่เป็นโรคหัวใจ (ปกติ)")
+            st.write(f"**ความน่าจะเป็นปกติ:** **{normal_pct:.1f}%** (โอกาสเสี่ยงโรคหัวใจเพียง {risk_pct:.1f}%)")
             st.progress(normal_pct / 100.0)
-            st.info("💡 **คำแนะนำ:** สุขภาพหัวใจอยู่ในเกณฑ์ปกติ ควรรักษาพฤติกรรมการออกกำลังกายและรับประทานอาหารที่มีประโยชน์")
+            st.info("💡 **สถานะ:** สุขภาพหัวใจฟิตเปรี๊ยะ ปกติดี เฟี้ยวๆ เลยครับ! ควรรักษาความฟิตและตรวจสุขภาพประจำปี")
         else:
-            st.error(f"### ⚠️ ผลการทำนาย: มีความเสี่ยงต่อโรคหัวใจ (Risk)")
-            st.write(f"**ความน่าจะเป็นของความเสี่ยงโรคหัวใจ:** {risk_pct:.1f}% (โอกาสปกติ: {normal_pct:.1f}%)")
+            st.error("### ⚠️ ผลการทำนาย: เป็นโรคหัวใจ (มีความเสี่ยง)")
+            st.write(f"**ความน่าจะเป็นของความเสี่ยงโรคหัวใจ:** **{risk_pct:.1f}%** (โอกาสปกติ: {normal_pct:.1f}%)")
             st.progress(risk_pct / 100.0)
-            st.warning("⚠️ **คำแนะนำ:** ตรวจพบปัจจัยเสี่ยงโรคหัวใจ ควรปรึกษาแพทย์เฉพาะทางเพื่อตรวจเช็กร่างกายอย่างละเอียด")
+            st.warning("⚠️ **คำเตือน:** ตรวจพบสัญญาณความเสี่ยงต่อโรคหัวใจ ควรพักผ่อนและปรึกษาแพทย์เฉพาะทางเพื่อตรวจเช็กอย่างละเอียด")
 else:
     st.write("ไม่ทำนาย")
